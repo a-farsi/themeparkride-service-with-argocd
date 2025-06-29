@@ -16,8 +16,8 @@ spec:
     spec:
       containers:
       - name: themeparkride-service
-        image: my-themeparkride-service:v1
-        imagePullPolicy: Never
+        image: afarsi/my-themeparkride-service:v2
+        imagePullPolicy: Always
         ports:
         - containerPort: 8082
         env:
