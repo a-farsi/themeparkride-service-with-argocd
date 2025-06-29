@@ -1,0 +1,50 @@
+# PostgreSQL pour themeparkride-service (simple version)
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: themeparkride-db-pvc
+  namespace: dev
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: themeparkride-db
+  namespace: dev
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: themeparkride-db
+  template:
+    metadata:
+      labels:
+        app: themeparkride-db
+    spec:
+      containers:
+      - name: postgres
+        image: postgres:16
+        env:
+        - name: POSTGRES_DB
+          value: themeparkridedb
+        - name: POSTGRES_USER
+          value: user_themeparkride
+        - name: POSTGRES_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: themeparkride-secrets
+              key: SPRING_DATASOURCE_PASSWORD
+        ports:
+        - containerPort: 5432
+        volumeMounts:
+        - mountPath: /var/lib/postgresql/data
+          name: data
+      volumes:
+      - name: data
+        persistentVolumeClaim:
+          claimName: themeparkride-db-pvc

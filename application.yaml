@@ -1,0 +1,25 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: myapp-themeparkride-service
+  namespace: argocd
+spec:
+  project: default
+  source:
+    repoURL: https://github.com/a-farsi/themeparkride-service-with-argocd.git
+    targetRevision: HEAD
+    path: k8s
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: dev
+
+  syncPolicy:
+    syncOptions:
+    - CreateNameSpace=true
+
+    automated: 
+      selfHeal: true
+      prune: true
+      
+
+  

@@ -1,0 +1,48 @@
+# Deployment du themeparkride-service
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: themeparkride-service
+  namespace: dev
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: themeparkride-service
+  template:
+    metadata:
+      labels:
+        app: themeparkride-service
+    spec:
+      containers:
+      - name: themeparkride-service
+        image: my-themeparkride-service:v1
+        imagePullPolicy: Never
+        ports:
+        - containerPort: 8082
+        env:
+        - name: SPRING_PROFILES_ACTIVE
+          valueFrom:
+            configMapKeyRef:
+              name: themeparkride-config
+              key: SPRING_PROFILES_ACTIVE
+        - name: SPRING_DATASOURCE_URL
+          valueFrom:
+            configMapKeyRef:
+              name: themeparkride-config
+              key: SPRING_DATASOURCE_URL
+        - name: SPRING_DATASOURCE_USERNAME
+          valueFrom:
+            configMapKeyRef:
+              name: themeparkride-config
+              key: SPRING_DATASOURCE_USERNAME
+        - name: SPRING_DATASOURCE_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: themeparkride-secrets
+              key: SPRING_DATASOURCE_PASSWORD
+        - name: EUREKA_CLIENT_SERVICEURL_DEFAULTZONE
+          valueFrom:
+            configMapKeyRef:
+              name: themeparkride-config
+              key: EUREKA_CLIENT_SERVICEURL_DEFAULTZONE

@@ -1,0 +1,12 @@
+---
+# ConfigMap pour les variables d'environnement non sensibles
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: themeparkride-config
+  namespace: dev
+data:
+  SPRING_PROFILES_ACTIVE: "dev"
+  SPRING_DATASOURCE_URL: "jdbc:postgresql://themeparkride-db:5432/themeparkridedb"
+  SPRING_DATASOURCE_USERNAME: "user_themeparkride"
+  EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: "http://discovery-service:8761/eureka"
